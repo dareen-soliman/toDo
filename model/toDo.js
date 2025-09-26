@@ -1,6 +1,6 @@
 const mongoose= require("mongoose");
 
-const toDoSchema= new mongoose.schema({
+const toDoSchema= new mongoose.Schema({
     title: {type: String, required:true},
     done: {type:Boolean, default:false},
     createdAt: {type: Date, default: Date.now},
