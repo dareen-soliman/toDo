@@ -1,35 +1,62 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import React, { useEffect, useState } from "react";
+import TodoForm from "./components/ToDoForm";
+import TodoList from "./components/ToDoList";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [todos, setTodos] = useState([]);
+
+  // Fetch todos
+  const fetchTodos = async () => {
+    try {
+      const res = await fetch("http://localhost:3000/api/todos");
+      const data = await res.json();
+      setTodos(data);
+    } catch (err) {
+      console.error("Error fetching todos:", err);
+    }
+  };
+
+  // Update todo
+  const updateTodo = async (id, updatedFields) => {
+    try {
+      await fetch(`http://localhost:3000/api/todos/${id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(updatedFields),
+      });
+      fetchTodos();
+    } catch (err) {
+      console.error("Error updating todo:", err);
+    }
+  };
+
+  // Delete todo
+  const deleteTodo = async (id) => {
+    try {
+      await fetch(`http://localhost:3000/api/todos/${id}`, {
+        method: "DELETE",
+      });
+      fetchTodos();
+    } catch (err) {
+      console.error("Error deleting todo:", err);
+    }
+  };
+
+  useEffect(() => {
+    fetchTodos();
+  }, []);
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <div style={{ padding: "20px", maxWidth: "400px", margin: "auto" }}>
+      <h1>My ToDo App</h1>
+      <TodoForm refreshTodos={fetchTodos} />
+      <TodoList
+        todos={todos}
+        updateTodo={updateTodo}
+        deleteTodo={deleteTodo}
+      />
+    </div>
+  );
 }
 
-export default App
+export default App;
