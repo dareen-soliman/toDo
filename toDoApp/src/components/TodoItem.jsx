@@ -23,11 +23,12 @@ const TodoItem = ({ todo, updateTodo, deleteTodo }) => {
     <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
       {/* Bigger Checkbox */}
       <input
-        type="checkbox"
-        checked={!!todo.completed}
-        onChange={handleCheckboxChange}
+         type="checkbox"
+        checked={!!todo.done}  
+        onChange={() => updateTodo(todo._id, { done: !todo.done })}
         style={{ width: "20px", height: "20px" }}
-      />
+    />
+
 
       {/* Title / Input field */}
       {isEditing ? (
@@ -46,7 +47,7 @@ const TodoItem = ({ todo, updateTodo, deleteTodo }) => {
       )}
 
       {/* Delete button */}
-      <button onClick={() => deleteTodo(todo._id)}>Delete</button>
+      <button onClick={() => deleteTodo(todo._id)}>❌</button>
     </div>
   );
 };
