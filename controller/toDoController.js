@@ -1,4 +1,4 @@
-const ToDo = require("../models/ToDo");
+const ToDo = require("../model/toDo.js");
 
 // POST: Add a new todo
 const createTodo = async (req, res) => {
