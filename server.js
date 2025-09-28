@@ -3,6 +3,10 @@ const cors= require("cors");
 const mongoose = require("mongoose");
 const ToDo = require("./model/toDo.js");
 const todoRoutes = require("./route/routes.js");
+const swaggerUi = require("swagger-ui-express");
+const YAML = require("yamljs");
+const openapi = YAML.load("openapi.yaml");
+
 
 const app=express()
 app.use(express.json())
@@ -14,6 +18,7 @@ mongoose.connect("mongodb://localhost:27017/toDoApp")
 const port = process.env.PORT || 3000;
 
 app.use("/api/todos", todoRoutes);
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(openapi,{explorer:true}));
 
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
